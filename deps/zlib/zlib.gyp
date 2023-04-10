@@ -5,12 +5,23 @@
 {
   'variables': {
     'ZLIB_ROOT': '.',
-    'use_system_zlib%': 0,
     'arm_fpu%': '',
     'llvm_version%': '0.0',
   },
+  'targets': [
+    {
+      'target_name': 'zlib_google',
+      'type': 'static_library',
+      'sources': [
+        '<!@pymod_do_main(GN-scraper "<(ZLIB_ROOT)/google/BUILD.gn" "\\"compression_utils_portable\\".*?sources = ")',
+      ],
+      'conditions': [
+        ['node_shared_zlib=="false"', {
+         'include_dirs': [ '<(ZLIB_ROOT)' ] }]],
+    },
+  ],
   'conditions': [
-    ['use_system_zlib==0', {
+    ['node_shared_zlib=="false"', {
       'targets': [
         {
           'target_name': 'zlib_adler32_simd',
@@ -174,12 +185,16 @@
         {
           'target_name': 'zlib',
           'type': 'static_library',
+          'dependencies': [ 'zlib_google' ],
           'sources': [
             '<!@pymod_do_main(GN-scraper "<(ZLIB_ROOT)/BUILD.gn" "\\"zlib\\".*?sources = ")',
           ],
           'include_dirs': [ '<(ZLIB_ROOT)' ],
           'direct_dependent_settings': {
-            'include_dirs': [ '<(ZLIB_ROOT)' ],
+            'include_dirs': [
+              '<(ZLIB_ROOT)',
+              '<(ZLIB_ROOT)/google',
+            ],
           },
           'conditions': [
             ['OS!="win"', {
@@ -248,9 +263,13 @@
         {
           'target_name': 'zlib',
           'type': 'static_library',
+          'dependencies': [ 'zlib_google' ],
           'direct_dependent_settings': {
             'defines': [
               'USE_SYSTEM_ZLIB',
+            ],
+            'include_dirs': [
+              '<(ZLIB_ROOT)/google',
             ],
           },
           'defines': [
