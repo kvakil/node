@@ -30,7 +30,7 @@
           'toolsets': ['host', 'target'],
           'type': 'static_library',
           'conditions': [
-            ['target_arch in "ia32 x64" and OS!="ios"', {
+            ['_toolset=="target" and target_arch in "ia32 x64" and OS!="ios"', {
               'defines': [ 'ADLER32_SIMD_SSSE3' ],
               'conditions': [
                 ['OS=="win"', {
@@ -46,14 +46,14 @@
                 }],
               ],
             }],
-            ['arm_fpu=="neon"', {
+            ['_toolset=="target" and arm_fpu=="neon"', {
               'defines': [ 'ADLER32_SIMD_NEON' ],
             }],
           ],
           'include_dirs': [ '<(ZLIB_ROOT)' ],
           'direct_dependent_settings': {
             'conditions': [
-              ['target_arch in "ia32 x64" and OS!="ios"', {
+              ['_toolset=="target" and target_arch in "ia32 x64" and OS!="ios"', {
                 'defines': [ 'ADLER32_SIMD_SSSE3' ],
                 'conditions': [
                   ['OS=="win"', {
@@ -63,7 +63,7 @@
                   }],
                 ],
               }],
-              ['arm_fpu=="neon"', {
+              ['_toolset=="target" and arm_fpu=="neon"', {
                 'defines': [ 'ADLER32_SIMD_NEON' ],
               }],
             ],
@@ -155,7 +155,7 @@
           'toolsets': ['host', 'target'],
           'type': 'static_library',
           'conditions': [
-            ['target_arch in "ia32 x64" and OS!="ios"', {
+            ['_toolset=="target" and target_arch in "ia32 x64" and OS!="ios"', {
               'defines': [ 'INFLATE_CHUNK_SIMD_SSE2' ],
               'conditions': [
                 ['target_arch=="x64"', {
@@ -163,7 +163,7 @@
                 }],
               ],
             }],
-            ['arm_fpu=="neon"', {
+            ['_toolset=="target" and arm_fpu=="neon"', {
               'defines': [ 'INFLATE_CHUNK_SIMD_NEON' ],
               'conditions': [
                 ['target_arch=="arm64"', {
@@ -175,10 +175,10 @@
           'include_dirs': [ '<(ZLIB_ROOT)' ],
           'direct_dependent_settings': {
             'conditions': [
-              ['target_arch in "ia32 x64" and OS!="ios"', {
+              ['_toolset=="target" and target_arch in "ia32 x64" and OS!="ios"', {
                 'defines': [ 'INFLATE_CHUNK_SIMD_SSE2' ],
               }],
-              ['arm_fpu=="neon"', {
+              ['_toolset=="target" and arm_fpu=="neon"', {
                 'defines': [ 'INFLATE_CHUNK_SIMD_NEON' ],
               }],
             ],
@@ -220,14 +220,14 @@
               ],
             }],
             # Incorporate optimizations where possible.
-            ['(target_arch in "ia32 x64" and OS!="ios") or arm_fpu=="neon"', {
+            ['_toolset=="target" and ((target_arch in "ia32 x64" and OS!="ios") or arm_fpu=="neon")', {
               'dependencies': [ 'zlib_inflate_chunk_simd' ],
               'sources': [ '<(ZLIB_ROOT)/slide_hash_simd.h' ]
             }, {
               'defines': [ 'CPU_NO_SIMD' ],
               'sources': [ '<(ZLIB_ROOT)/inflate.c' ],
             }],
-            ['target_arch in "ia32 x64" and OS!="ios"', {
+            ['_toolset=="target" and target_arch in "ia32 x64" and OS!="ios"', {
               'dependencies': [
                 'zlib_adler32_simd',
                 'zlib_crc32_simd',
@@ -239,7 +239,7 @@
                 }],
               ],
             }],
-            ['arm_fpu=="neon"', {
+            ['_toolset=="target" and arm_fpu=="neon"', {
               'defines': [
                 '__ARM_NEON__',
                 'DEFLATE_SLIDE_HASH_NEON',
