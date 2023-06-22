@@ -11,13 +11,15 @@
   'targets': [
     {
       'target_name': 'zlib_google',
+      'toolsets': ['host', 'target'],
       'type': 'static_library',
       'sources': [
         '<!@pymod_do_main(GN-scraper "<(ZLIB_ROOT)/google/BUILD.gn" "\\"compression_utils_portable\\".*?sources = ")',
       ],
       'conditions': [
         ['node_shared_zlib=="false"', {
-         'include_dirs': [ '<(ZLIB_ROOT)' ] }]],
+         'include_dirs': [ '<(ZLIB_ROOT)' ] }],
+      ],
     },
   ],
   'conditions': [
@@ -25,6 +27,7 @@
       'targets': [
         {
           'target_name': 'zlib_adler32_simd',
+          'toolsets': ['host', 'target'],
           'type': 'static_library',
           'conditions': [
             ['target_arch in "ia32 x64" and OS!="ios"', {
@@ -72,6 +75,7 @@
         }, # zlib_adler32_simd
         {
           'target_name': 'zlib_arm_crc32',
+          'toolsets': ['host', 'target'],
           'type': 'static_library',
           'conditions': [
             ['OS!="ios"', {
@@ -120,6 +124,7 @@
         }, # zlib_arm_crc32
         {
           'target_name': 'zlib_crc32_simd',
+          'toolsets': ['host', 'target'],
           'type': 'static_library',
           'conditions': [
             ['OS!="win" or llvm_version!="0.0"', {
@@ -147,6 +152,7 @@
         }, # zlib_crc32_simd
         {
           'target_name': 'zlib_inflate_chunk_simd',
+          'toolsets': ['host', 'target'],
           'type': 'static_library',
           'conditions': [
             ['target_arch in "ia32 x64" and OS!="ios"', {
@@ -184,6 +190,7 @@
         }, # zlib_inflate_chunk_simd
         {
           'target_name': 'zlib',
+          'toolsets': ['host', 'target'],
           'type': 'static_library',
           'dependencies': [ 'zlib_google' ],
           'sources': [
@@ -262,6 +269,7 @@
       'targets': [
         {
           'target_name': 'zlib',
+          'toolsets': ['host', 'target'],
           'type': 'static_library',
           'dependencies': [ 'zlib_google' ],
           'direct_dependent_settings': {
